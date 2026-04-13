@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Expnd — Senior E-commerce Recruiting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --forest:#1B3A2F;--forest-mid:#2E5C48;
+  --sage:#8FBC8B;--sage-light:#C8DEC6;--sage-xlight:#EEF5ED;
+  --cream:#F5F2EB;--cream-deep:#E8E3D8;
+  --terra:#C4623A;--terra-light:#F4E0D6;
+  --stone:#6B7B74;--text:#111C18;--text-mid:#3D5047;--text-light:#6B7B74;
+  --border:#E4E0D8;--white:#FFFFFF;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --r:10px;--r-lg:16px;--r-xl:22px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);color:var(--text);background:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;}
+.screen.active{display:block;}
+#s-landing.active{display:block;height:100vh;overflow:hidden;}
+#s-candidate.active,#s-confirm.active,#s-admin.active{display:flex;flex-direction:column;}
+
+/* ── FULL LANDING ── */
+.landing-full{
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:flex-start;
+  height:100vh;overflow:hidden;position:relative;
+  background:var(--forest);
+  padding:0 10vw;
+  padding-top:8vh;
+}
+.landing-full::after{
+  content:'';position:absolute;
+  top:-30%;right:-15%;
+  width:65%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle, rgba(143,188,139,.12) 0%, transparent 70%);
+  pointer-events:none;
+}
+/* Large decorative serif letter */
+.landing-full::before{
+  content:'E';
+  font-family:var(--serif);font-style:italic;
+  font-size:42vw;line-height:1;
+  position:absolute;
+  bottom:-18%;right:-6%;
+  color:rgba(255,255,255,.025);
+  pointer-events:none;
+  user-select:none;
+}
+
+/* Logo */
+.landing-logo{
+  position:absolute;top:44px;left:10vw;z-index:10;
+  display:flex;align-items:center;gap:7px;pointer-events:none;
+}
+.landing-logo-name{
+  font-family:var(--serif);font-size:20px;color:var(--white);letter-spacing:.01em;
+}
+.landing-logo-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--terra);display:inline-block;margin-bottom:1px;
+}
+
+/* Content */
+.landing-eyebrow{
+  font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:22px;display:flex;align-items:center;gap:10px;
+  color:rgba(143,188,139,.7);
+  position:relative;z-index:2;
+}
+.landing-eyebrow::before{
+  content:'';height:1px;width:24px;background:rgba(143,188,139,.4);
+}
+
+.landing-h1{
+  font-family:var(--serif);
+  font-size:clamp(44px, 5vw, 72px);
+  line-height:1.05;letter-spacing:-.025em;
+  margin-bottom:18px;max-width:560px;
+  color:var(--white);
+  position:relative;z-index:2;
+}
+.landing-h1 em{ font-style:italic; color:var(--sage-light); }
+
+.landing-sub{
+  font-size:16px;font-weight:300;line-height:1.75;
+  max-width:420px;margin-bottom:44px;
+  color:rgba(255,255,255,.45);
+  position:relative;z-index:2;
+}
+
+.landing-cta{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:var(--sans);font-size:14px;font-weight:500;letter-spacing:.02em;
+  padding:16px 32px;border-radius:var(--r);border:none;
+  cursor:pointer;transition:all .25s;
+  position:relative;z-index:2;
+  background:transparent;
+  color:var(--white);
+  border:1px solid rgba(255,255,255,.25);
+  backdrop-filter:blur(8px);
+}
+.landing-cta svg{ transition:transform .25s;flex-shrink:0; }
+.landing-cta:hover svg{ transform:translateX(4px); }
+.landing-cta:hover{
+  background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.4);
+  box-shadow:0 0 0 1px rgba(255,255,255,.1);
+}
+
+.landing-tag{
+  position:absolute;bottom:28px;left:10vw;right:10vw;
+  font-size:11px;letter-spacing:.01em;line-height:1.6;
+  color:rgba(255,255,255,.18);
+  z-index:2;
+}
+
+/* footer strip */
+.landing-footer{
+  position:absolute;bottom:0;left:0;right:0;z-index:25;
+  height:36px;display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.landing-footer-inner{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(17,28,24,.65);backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.08);border-bottom:none;
+  border-radius:10px 10px 0 0;
+  padding:6px 22px;pointer-events:all;
+}
+.landing-footer span,.landing-footer a{
+  font-size:10px;color:rgba(255,255,255,.3);
+  text-decoration:none;letter-spacing:.02em;
+}
+.landing-footer a:hover{ color:rgba(255,255,255,.6); }
+.landing-footer-sep{ color:rgba(255,255,255,.12) !important; }
+
+
+/* ── FORM SCREENS ── */
+.form-shell{
+  min-height:100vh;background:var(--cream);
+  display:flex;flex-direction:column;
+}
+.form-topbar{
+  background:var(--white);border-bottom:1px solid var(--border);
+  padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.form-logo{font-family:var(--serif);font-size:20px;color:var(--forest);cursor:pointer;display:flex;align-items:center;gap:7px;}
+.form-logo-dot{width:6px;height:6px;border-radius:50%;background:var(--terra);display:inline-block;margin-bottom:1px;}
+.form-step-label{font-size:12px;color:var(--text-light);}
+
+/* Progress bar */
+.form-progress{height:3px;background:var(--cream-deep);}
+.form-progress-fill{height:100%;background:var(--forest);transition:width .4s ease;}
+
+.form-body{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:48px 24px;}
+.form-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:40px 44px;
+  width:100%;max-width:600px;
+  box-shadow:0 4px 24px rgba(27,58,47,.06);
+}
+
+/* Step header */
+.step-num{
+  font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--stone);margin-bottom:8px;
+}
+.step-h2{font-family:var(--serif);font-size:28px;color:var(--text);margin-bottom:6px;letter-spacing:-.01em;line-height:1.2;}
+.step-sub{font-size:14px;color:var(--text-light);font-weight:300;margin-bottom:28px;line-height:1.6;}
+
+/* Form elements */
+.fg{margin-bottom:20px;}
+.fg:last-of-type{margin-bottom:0;}
+.fl{font-size:12px;font-weight:500;color:var(--text-mid);margin-bottom:6px;display:block;}
+.fl span{font-weight:400;color:var(--text-light);}
+.fi,.fs,.ft{
+  width:100%;font-family:var(--sans);font-size:14px;
+  padding:11px 14px;border:1px solid var(--border);border-radius:var(--r);
+  color:var(--text);background:var(--white);outline:none;
+  transition:border-color .15s;
+}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--sage);}
+.fi::placeholder,.ft::placeholder{color:var(--text-light);}
+.ft{resize:vertical;min-height:100px;line-height:1.65;}
+.two-col-inputs{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* Buttons */
+.btn-row{display:flex;gap:12px;margin-top:28px;}
+.btn-submit{
+  font-family:var(--sans);font-size:14px;font-weight:500;
+  padding:13px 28px;border-radius:var(--r);border:none;
+  background:var(--terra);color:var(--white);cursor:pointer;
+  transition:background .15s;flex:1;
+}
+.btn-submit:hover{background:#b0562f;}
+
+/* Privacy note */
+.privacy-note{
+  display:flex;align-items:flex-start;gap:10px;
+  background:var(--sage-xlight);border:1px solid var(--sage-light);
+  border-radius:var(--r);padding:12px 14px;margin-top:20px;
+  font-size:12px;color:var(--forest-mid);line-height:1.6;
+}
+
+/* ── CONFIRMATION SCREEN ── */
+.confirm-screen{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:60px 24px;text-align:center;background:var(--cream);
+}
+.confirm-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(143,188,139,.12);
+  border:1px solid rgba(143,188,139,.35);
+  border-radius:20px;padding:6px 16px;margin-bottom:28px;
+  font-size:12px;font-weight:500;color:var(--forest-mid);letter-spacing:.01em;
+  backdrop-filter:blur(4px);
+}
+.confirm-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--sage);}
+.confirm-h2{font-family:var(--serif);font-size:38px;color:var(--text);margin-bottom:10px;letter-spacing:-.02em;line-height:1.15;}
+.confirm-sub{font-size:15px;color:var(--text-light);line-height:1.75;max-width:440px;font-weight:300;margin-bottom:36px;}
+.btn-home{
+  font-family:var(--sans);font-size:14px;font-weight:500;
+  padding:13px 32px;border-radius:var(--r);border:none;
+  background:var(--forest);color:var(--sage-light);cursor:pointer;
+  transition:background .15s;letter-spacing:.01em;
+}
+.btn-home:hover{background:var(--forest-mid);}
+.confirm-contact{font-size:12px;color:var(--text-light);margin-top:14px;}
+.confirm-contact a{color:var(--forest);text-decoration:none;font-weight:500;}
+
+/* Admin */
+.admin-screen{background:#0D1B14;min-height:100vh;padding:40px;}
+.admin-topbar{display:flex;align-items:center;gap:16px;margin-bottom:32px;}
+.admin-title{font-family:var(--serif);font-size:28px;color:var(--white);}
+.admin-badge{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--terra);color:var(--white);padding:3px 10px;border-radius:20px;}
+.sub-table{width:100%;border-collapse:collapse;font-size:13px;}
+.sub-table th{text-align:left;padding:10px 16px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);border-bottom:1px solid rgba(255,255,255,.08);}
+.sub-table td{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.8);vertical-align:top;}
+.sub-table tr:hover td{background:rgba(255,255,255,.03);}
+.type-badge{font-size:10px;font-weight:600;padding:2px 9px;border-radius:20px;display:inline-block;}
+.type-candidate{background:rgba(143,188,139,.2);color:var(--sage);}
+.type-company{background:rgba(196,98,58,.2);color:#E8906A;}
+.no-subs{text-align:center;padding:60px 20px;color:rgba(255,255,255,.3);font-size:14px;}
+.admin-back{font-family:var(--sans);font-size:12px;padding:7px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;margin-left:auto;}
+.admin-back:hover{color:var(--white);border-color:rgba(255,255,255,.5);}
+.sub-detail{font-size:11px;color:rgba(255,255,255,.4);margin-top:3px;line-height:1.5;}
+
+/* Tag buttons */
+.tag-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.tag-btn{
+  font-family:var(--sans);font-size:13px;font-weight:400;
+  padding:8px 16px;border-radius:20px;border:1px solid var(--border);
+  background:var(--white);color:var(--text-mid);cursor:pointer;
+  transition:all .15s;line-height:1;
+}
+.tag-btn:hover{border-color:var(--sage);color:var(--text);}
+.tag-btn.selected{
+  background:var(--forest);color:var(--white);border-color:var(--forest);
+}
+
+/* Pill buttons (single select) */
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;}
+.pill-btn{
+  font-family:var(--sans);font-size:13px;font-weight:400;
+  padding:8px 18px;border-radius:20px;border:1px solid var(--border);
+  background:var(--white);color:var(--text-mid);cursor:pointer;
+  transition:all .15s;line-height:1;
+}
+.pill-btn:hover{border-color:var(--sage);color:var(--text);}
+.pill-btn.selected{
+  background:var(--forest);color:var(--white);border-color:var(--forest);
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     SCREEN: LANDING
+══════════════════════════════════ -->
+<div class="screen active" id="s-landing">
+  <div class="landing-full">
+
+    <!-- Logo -->
+    <div class="landing-logo">
+      <span class="landing-logo-name">Expnd</span>
+      <span class="landing-logo-dot"></span>
+    </div>
+
+    <div class="landing-eyebrow">For senior professionals</div>
+    <h1 class="landing-h1">Your next move,<br/><em>on your terms.</em></h1>
+    <p class="landing-sub">Senior e-commerce, DTC, and SaaS professionals. Share your details privately — we'll reach out when there's something worth your time.</p>
+    <button class="landing-cta" onclick="startFlow('candidate')">
+      Connect here
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+
+    <!-- Hidden admin access -->
+    <a href="#" onclick="showAdmin();return false;" style="position:absolute;bottom:16px;right:16px;width:12px;height:12px;opacity:0;z-index:30;">&middot;</a>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     SCREEN: CANDIDATE FORM (simplified)
+══════════════════════════════════ -->
+<div class="screen" id="s-candidate">
+  <div class="form-shell">
+    <div class="form-topbar">
+      <div class="form-logo" onclick="goHome()">Expnd <span class="form-logo-dot"></span></div>
+      <div></div>
+      <button onclick="goHome()" style="font-family:var(--sans);font-size:12px;color:var(--text-light);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        Exit
+      </button>
+    </div>
+    <div class="form-progress"><div class="form-progress-fill" id="c-progress" style="width:100%;"></div></div>
+
+    <div class="form-body">
+      <div class="form-card">
+
+        <h2 class="step-h2">Tell us a bit about you.</h2>
+        <p class="step-sub">Super simple — just the basics so we can connect.</p>
+
+        <div class="two-col-inputs">
+          <div class="fg"><label class="fl">First name</label><input class="fi" id="c-fname" placeholder="Jamie"/></div>
+          <div class="fg"><label class="fl">Last name</label><input class="fi" id="c-lname" placeholder="Reeves"/></div>
+        </div>
+        <div class="fg"><label class="fl">Email address</label><input class="fi" type="email" id="c-email" placeholder="jamie@email.com"/></div>
+        <div class="fg"><label class="fl">LinkedIn profile</label><input class="fi" id="c-linkedin" placeholder="linkedin.com/in/jamiereeves"/></div>
+
+        <div class="fg">
+          <label class="fl">Area of expertise <span>(select all that apply)</span></label>
+          <div class="tag-grid" id="c-tags">
+            <button type="button" class="tag-btn" data-tag="Marketing">Marketing</button>
+            <button type="button" class="tag-btn" data-tag="Sales">Sales</button>
+            <button type="button" class="tag-btn" data-tag="Operations">Operations</button>
+            <button type="button" class="tag-btn" data-tag="Growth">Growth</button>
+            <button type="button" class="tag-btn" data-tag="CRM &amp; Retention">CRM &amp; Retention</button>
+            <button type="button" class="tag-btn" data-tag="Paid Media">Paid Media</button>
+            <button type="button" class="tag-btn" data-tag="Brand &amp; Creative">Brand &amp; Creative</button>
+            <button type="button" class="tag-btn" data-tag="Analytics &amp; Data">Analytics &amp; Data</button>
+            <button type="button" class="tag-btn" data-tag="Product">Product</button>
+            <button type="button" class="tag-btn" data-tag="Finance">Finance</button>
+            <button type="button" class="tag-btn" data-tag="Supply Chain &amp; Logistics">Supply Chain &amp; Logistics</button>
+            <button type="button" class="tag-btn" data-tag="Technology &amp; Engineering">Technology &amp; Engineering</button>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="fl">Years of experience</label>
+          <div class="pill-row" id="c-experience">
+            <button type="button" class="pill-btn" data-val="1–5 years">1–5 years</button>
+            <button type="button" class="pill-btn" data-val="5–10 years">5–10 years</button>
+            <button type="button" class="pill-btn" data-val="10–15 years">10–15 years</button>
+            <button type="button" class="pill-btn" data-val="15+ years">15+ years</button>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="fl">Your superpowers &amp; passionate sectors / niches</label>
+          <textarea class="ft" id="c-superpowers" style="min-height:100px;" placeholder="E.g. scaling DTC brands through paid social, deep in beauty & wellness, obsessed with retention strategy for subscription businesses…"></textarea>
+        </div>
+
+        <div class="privacy-note">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Your information is reviewed only by our team. Nothing is shared publicly or with anyone until we've spoken with you first.</span>
+        </div>
+
+        <div id="c-err" style="display:none;font-size:12px;color:var(--terra);margin-top:8px;"></div>
+        <div class="btn-row"><button class="btn-submit" onclick="submitCandidate()">Submit &rarr;</button></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     SCREEN: CONFIRMATION
+══════════════════════════════════ -->
+<div class="screen" id="s-confirm">
+  <div class="form-shell">
+    <div class="form-topbar">
+      <div class="form-logo" onclick="goHome()">Expnd <span class="form-logo-dot"></span></div>
+      <div></div>
+      <button onclick="goHome()" style="font-family:var(--sans);font-size:12px;color:var(--forest);background:none;border:none;cursor:pointer;">Back to home</button>
+    </div>
+    <div class="confirm-screen">
+
+      <div class="confirm-badge">
+        <span class="confirm-badge-dot"></span>
+        Submission received
+      </div>
+
+      <h2 class="confirm-h2" id="confirm-title">We've received your details.</h2>
+      <p class="confirm-sub" id="confirm-sub">Thank you — someone from our team will be in touch shortly.</p>
+
+      <button class="btn-home" onclick="goHome()">Back to home</button>
+      <p class="confirm-contact">We'll be in touch soon.</p>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     SCREEN: ADMIN LOG
+══════════════════════════════════ -->
+<div class="screen" id="s-admin">
+  <div class="admin-screen">
+    <div class="admin-topbar">
+      <div class="admin-title">Expnd</div>
+      <span class="admin-badge">Submissions</span>
+      <button class="admin-back" onclick="goHome()">&larr; Exit admin</button>
+    </div>
+
+    <div id="admin-content">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // ── STORAGE KEY ──
+  const STORE_KEY = 'dcr_submissions';
+
+  function getSubmissions() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }
+    catch { return []; }
+  }
+  function saveSubmission(obj) {
+    const subs = getSubmissions();
+    subs.unshift({ ...obj, id: Date.now(), ts: new Date().toISOString() });
+    localStorage.setItem(STORE_KEY, JSON.stringify(subs));
+  }
+
+  // ── NAVIGATION ──
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  function goHome() { showScreen('s-landing'); }
+  function startFlow(type) {
+    // Company flow logged but not exposed in UI
+    if (type === 'candidate') { showScreen('s-candidate'); }
+  }
+  function showAdmin() {
+    renderAdmin();
+    showScreen('s-admin');
+  }
+
+  // ── VALIDATION ──
+  function showErr(id, msg) {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = msg; el.style.display = 'block'; }
+  }
+  function clearErr(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  }
+
+  // ── TAG & PILL TOGGLES ──
+  document.querySelectorAll('.tag-btn').forEach(btn => {
+    btn.addEventListener('click', () => btn.classList.toggle('selected'));
+  });
+  document.querySelectorAll('.pill-row').forEach(row => {
+    row.querySelectorAll('.pill-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+  });
+
+  function getSelectedTags() {
+    return [...document.querySelectorAll('#c-tags .tag-btn.selected')].map(b => b.dataset.tag);
+  }
+  function getSelectedExperience() {
+    const sel = document.querySelector('#c-experience .pill-btn.selected');
+    return sel ? sel.dataset.val : '';
+  }
+
+  // ── SUBMIT ──
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzQsf9mp5-Dms1zdHeofSFmmaKeCMjXz5BZ_ZsTyLZrROwxUS5zRlOdS89iM_kFhwT5Ug/exec';
+
+  function submitCandidate() {
+    clearErr('c-err');
+    const fname = val('c-fname');
+    const lname = val('c-lname');
+    const email = val('c-email');
+    const linkedin = val('c-linkedin');
+    const superpowers = val('c-superpowers');
+
+    if (!fname || !lname) { showErr('c-err', 'Please enter your name.'); return; }
+    if (!email || !email.includes('@') || !email.includes('.')) { showErr('c-err', 'Please enter a valid email address.'); return; }
+
+    const expertise = getSelectedTags();
+    const experience = getSelectedExperience();
+
+    const data = {
+      firstName: fname, lastName: lname,
+      email: email, linkedin: linkedin,
+      expertise: expertise.join(', '),
+      experience: experience,
+      superpowers: superpowers,
+    };
+
+    // Save locally as backup
+    saveSubmission(data);
+
+    // Send to Google Sheet
+    fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).catch(() => {});
+
+    const name = data.firstName || 'there';
+    document.getElementById('confirm-title').textContent = `Thanks, ${name}. We've got your details.`;
+    document.getElementById('confirm-sub').textContent = 'Someone from our team will review and be in touch shortly. No bots, no noise — just a real conversation when the time is right.';
+    showScreen('s-confirm');
+  }
+
+  // Company submit still available in backend for future use
+  function submitCompany(data) {
+    saveSubmission({ type: 'company', ...data });
+  }
+
+  // ── HELPERS ──
+  function val(id) {
+    const el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+
+  // ── ADMIN RENDER ──
+  function renderAdmin() {
+    const subs = getSubmissions();
+    const content = document.getElementById('admin-content');
+    if (!subs.length) {
+      content.innerHTML = '<div class="no-subs">No submissions yet. They\'ll appear here as they come in.</div>';
+      return;
+    }
+    const rows = subs.map(s => {
+      const date = new Date(s.ts).toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+      if (s.type === 'candidate') {
+        return `<tr>
+          <td><span class="type-badge type-candidate">Candidate</span></td>
+          <td><strong>${s.firstName} ${s.lastName}</strong><div class="sub-detail">${s.email}</div></td>
+          <td>${s.linkedin || '—'}</td>
+          <td style="max-width:400px;">${s.superpowers || '—'}</td>
+          <td>${date}</td>
+        </tr>`;
+      } else {
+        return `<tr>
+          <td><span class="type-badge type-company">Company</span></td>
+          <td><strong>${s.company || 'Company'}</strong><div class="sub-detail">${s.email || ''}</div></td>
+          <td>${s.roleTitle || '—'}</td>
+          <td>${s.description || '—'}</td>
+          <td>${date}</td>
+        </tr>`;
+      }
+    }).join('');
+
+    content.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="font-size:13px;color:rgba(255,255,255,.4);">${subs.length} submission${subs.length !== 1 ? 's' : ''} total</div>
+        <button onclick="clearSubmissions()" style="font-family:var(--sans);font-size:11px;color:rgba(255,255,255,.3);background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:4px 12px;cursor:pointer;">Clear all</button>
+      </div>
+      <div style="overflow-x:auto;border-radius:12px;border:1px solid rgba(255,255,255,.08);">
+        <table class="sub-table">
+          <thead>
+            <tr>
+              <th>Type</th><th>Name</th><th>LinkedIn</th>
+              <th>Superpowers / Sectors</th><th>Received</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  function clearSubmissions() {
+    if (confirm('Clear all submissions? This cannot be undone.')) {
+      localStorage.removeItem(STORE_KEY);
+      renderAdmin();
+    }
+  }
+</script>
+</body>
+</html>
